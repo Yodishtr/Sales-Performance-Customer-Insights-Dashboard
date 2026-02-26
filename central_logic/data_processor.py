@@ -11,7 +11,7 @@ def checkForDuplicates(dataframe):
         
     
 def checkForNulls(dataframe):
-    list_of_important_cols = ["order_date", "ship_date", "sales", "profit", "quantity", "order_id", "product_id"]
+    list_of_important_cols = ["sales", "profit", "quantity", "order_id"]
     number_of_nulls = dataframe[list_of_important_cols].isna().sum()
     if (number_of_nulls.sum() > 0):
         dataframe = dataframe.dropna(subset=list_of_important_cols)
@@ -36,12 +36,17 @@ def removeIllegalValues(dataframe):
 
 if __name__ == "__main__":
     data_frame = pd.read_csv("raw_data/Superstore.csv", encoding="cp1252")
+    print(data_frame.shape)
     data_frame["Order Date"] = pd.to_datetime(data_frame["Order Date"], format='%m/%d/%Y', errors="coerce")
     data_frame["Ship Date"] = pd.to_datetime(data_frame["Ship Date"], format='%m/%d/%Y', errors="coerce")
     data_frame = standardiseColumnNames(data_frame)
+    print(data_frame.shape)
     data_frame = checkForDuplicates(data_frame)
+    print(data_frame.shape)
     data_frame = checkForNulls(data_frame)
+    print(data_frame.shape)
     data_frame = removeIllegalValues(data_frame)
+    print(data_frame.shape)
 
     # profit margin col:
     data_frame["profit_margin"] = (data_frame["profit"] / data_frame["sales"]) * 100
